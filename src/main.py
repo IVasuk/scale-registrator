@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import threading
 import argparse
-import sc_dbms
+import src.sc_dbms as sc_dbms
 import src.sc_scales as sc_scales
 
 from datetime import datetime
