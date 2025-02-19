@@ -2,7 +2,7 @@
 import threading
 import argparse
 import sc_dbms
-import sc_scales
+import src.sc_scales as sc_scales
 
 from datetime import datetime
 from time import sleep

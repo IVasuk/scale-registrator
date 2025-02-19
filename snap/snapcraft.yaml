@@ -19,17 +19,17 @@ apps:
     restart-condition: always
   
   create-tables:
-    command: bin/wrappers/create-tables-wrappper
+    command: bin/wrappers/create-tables-wrapper
     plugs:
       - network-bind
 
   create-publications:
-    command: bin/wrappers/create-publications-wrappper
+    command: bin/wrappers/create-publications-wrapper
     plugs:
       - network-bind
 
   create-subscriptions:
-    command: bin/wrappers/create-subscriptions-wrappper
+    command: bin/wrappers/create-subscriptions-wrapper
     plugs:
       - network-bind
 
@@ -54,6 +54,8 @@ environment:
 layout:
   /usr/share/scale-registrator:
     bind: $SNAP/usr/share/scale-registrator
+  /usr/share/create-tables:
+    bind: $SNAP/usr/share/create-tables
 
 parts:
   wrapper:
