@@ -1,0 +1,12 @@
+[Unit]
+Description=scale registrator
+After=postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+ExecStart=/home/ubuntu/scale-registrator/service/scale-registrator.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

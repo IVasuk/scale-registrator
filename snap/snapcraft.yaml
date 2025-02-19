@@ -1,0 +1,87 @@
+name: scale-registrator  # you probably want to 'snapcraft register <name>'
+version: '1.0' # just for humans, typically '1.2+git' or '1.3.2'
+summary: Реєстратор зважувань з фотофіксацією # 79 char long summary
+description: Реєстратор зважувань з фотофіксацією
+confinement: strict
+compression: lzo
+grade: stable
+base: core22
+
+apps:
+  scale-registrator:
+    command: bin/wrappers/scale-registrator-wrapper
+    plugs: &_plugs
+      - home
+      - network-bind
+    environment: &_environment
+    daemon: simple
+    restart-delay: 3s
+    restart-condition: always
+  
+  create-tables:
+    command: bin/wrappers/create-tables-wrappper
+    plugs:
+      - network-bind
+
+  create-publications:
+    command: bin/wrappers/create-publications-wrappper
+    plugs:
+      - network-bind
+
+  create-subscriptions:
+    command: bin/wrappers/create-subscriptions-wrappper
+    plugs:
+      - network-bind
+
+plugs:
+  usbserial0:
+    interface: serial-port
+    path: /dev/ttyUSB0
+  usbserial1:
+    interface: serial-port
+    path: /dev/ttyUSB1
+  usbserial2:
+    interface: serial-port
+    path: /dev/ttyUSB2
+  usbserial3:
+    interface: serial-port
+    path: /dev/ttyUSB3
+
+environment:
+    PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/dist-packages:$SNAP/usr/lib/python3.10/site-packages
+
+# The `layout` ensures that files can be found by applications where they are expected by the toolkit or application.
+layout:
+  /usr/share/scale-registrator:
+    bind: $SNAP/usr/share/scale-registrator
+
+parts:
+  wrapper:
+    plugin: dump
+    source: ./wrappers
+    organize:
+      scale-registrator-wrapper: bin/wrappers/scale-registrator-wrapper
+      create-tables-wrapper: bin/wrappers/create-tables-wrapper
+      create-publications-wrapper: bin/wrappers/create-publications-wrapper
+      create-subscriptions-wrapper: bin/wrappers/create-subscriptions-wrapper
+
+  scripts:
+    plugin: dump
+    source: ./scripts
+    organize:
+      management-script: bin/scripts/management-script
+    
+  scale-registrator:
+    stage-packages:
+      - python3-serial    
+      - python3-peewee    
+      - python3-psycopg2    
+    plugin: python
+#    python-packages: [pip, setuptools, wheel, future, pycairo, pygobject, psycopg2-binary, argparse]
+    source: .
+
+architectures:
+  - build-on: amd64
+#  - build-on: arm64
+#  - build-on: armhf
+
